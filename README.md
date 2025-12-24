@@ -314,3 +314,67 @@ This project demonstrates:
 
 **NEXORA AI is not a demo project.**
 It is a long-term intelligence system designed to grow with experience, scale with ambition, and stand strong in any technical interview.
+
+Key Features
+Modular Architecture: Clean separation of concerns with dedicated modules for Ingestion, Validation, Feature Engineering, Modeling, Explainability, and Reporting.
+Data Ingestion: Robust handling of data sources (CSV) with extensible support for others.
+Automated Validation: Schema and data quality checks to ensure reliable inputs.
+Feature Engineering: Automated preprocessing and feature extraction.
+Model Training:
+Tasks: Regression and Classification.
+Algorithms: Random Forest, Linear Regression, Logistic Regression.
+Explainable AI (XAI): Integrated insights into model predictions to ensure transparency.
+GenAI Reporting: Generates narrative reports explaining analysis results using Generative AI.
+Web Dashboard: A FastAPI-based web interface and API for interacting with the platform.
+Installation
+Prerequisites
+Python 3.8+
+pip
+Setup
+Clone the repository:
+
+git clone https://github.com/yourusername/nexora-ai.git
+cd nexora-ai
+Install the package in editable mode:
+
+pip install -e .
+Usage
+Command Line Interface (CLI)
+You can run the full pipeline directly from the command line using main.py.
+
+Arguments:
+
+--source: Path to the input CSV data file.
+--target: Name of the target column for prediction.
+--task: Task type (regression or classification).
+--algo: Algorithm to use (rf [Random Forest], linear [Linear Regression], logistic [Logistic Regression]). Default is rf.
+Example: Run a classification task using Random Forest on a sample dataset:
+
+python main.py --source data/sample_data.csv --target churn --task classification --algo rf
+Web Interface & API
+Nexora AI includes a modern web dashboard and REST API built with FastAPI.
+
+To start the server:
+
+uvicorn nexora.web.api:app --reload
+Dashboard: Open http://127.0.0.1:8000 in your browser.
+API Docs: Open http://127.0.0.1:8000/docs for the interactive API documentation.
+Project Structure
+The source code is organized clearly in src/nexora:
+
+core/: Core configurations and exception handling.
+ingestion/: Data loading and parsing.
+validation/: Data quality and schema validation.
+feature_engineering/: Data transformation and feature creation.
+modeling/: Model training and evaluation logic.
+explainability/: Model interpretation tools.
+genai/: Narrative generation components.
+reporting/: Report generation and formatting.
+orchestration/: Pipeline coordination.
+web/: Web application and API endpoints.
+Development
+To run the test suite:
+
+pytest tests/
+License
+This project is licensed under the MIT License. See the LICENSE file for details.
