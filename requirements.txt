@@ -1,0 +1,16 @@
+# NEXORA AI Requirements
+# 
+# This file lists the dependencies for the NEXORA AI platform.
+# For the scaffold, no external dependencies are required.
+# 
+# When implementing actual functionality, uncomment and add:
+# numpy>=1.24.0
+# pandas>=2.0.0
+# scikit-learn>=1.3.0
+# 
+# For development:
+# pytest>=7.4.0
+# pytest-cov>=4.1.0
+# black>=23.7.0
+# ruff>=0.0.285
+# mypy>=1.5.0
