@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from typing import Dict, Any, Union
 from nexora.core.logger import Logger
 
 class AnomalyDetector:
@@ -64,3 +65,27 @@ class AnomalyDetector:
         except Exception as e:
             self.logger.error(f"Isolation Forest failed: {e}")
             return pd.Series(False, index=df.index)
+
+    def summarize_anomalies(self, df: pd.DataFrame, anomalies: Union[pd.DataFrame, pd.Series]) -> Dict[str, Any]:
+        """
+        Produce a summary report of anomalies.
+        """
+        total_rows = len(df)
+        
+        if isinstance(anomalies, pd.DataFrame):
+            # IQR method returns DataFrame
+            count = anomalies.any(axis=1).sum()
+            indices = anomalies[anomalies.any(axis=1)].index.tolist()
+        else:
+            # Isolation Forest returns Series
+            count = anomalies.sum()
+            indices = anomalies[anomalies].index.tolist()
+            
+        contamination = count / total_rows if total_rows > 0 else 0
+        
+        return {
+            "total_rows": total_rows,
+            "anomaly_count": count,
+            "contamination_ratio": round(contamination, 4),
+            "anomaly_indices": indices[:20] # Return safe sample of indices
+        }

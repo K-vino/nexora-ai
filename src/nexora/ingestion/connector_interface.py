@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 import pandas as pd
+from typing import Dict, Any
 
 class DataConnector(ABC):
     """
@@ -20,5 +21,19 @@ class DataConnector(ABC):
             
         Raises:
             DataIngestionError: If data cannot be loaded.
+        """
+        pass
+
+    @abstractmethod
+    def get_preview(self, source: str, rows: int = 5) -> pd.DataFrame:
+        """
+        Get a small preview of the data without loading everything.
+        """
+        pass
+        
+    @abstractmethod
+    def get_metadata(self, source: str) -> Dict[str, Any]:
+        """
+        Extract metadata (rows, columns, types, file size) without full load if possible.
         """
         pass
