@@ -1,6 +1,6 @@
 # NEXORA AI — Unified Data Science & Artificial Intelligence Platform
 
-![Nexora AI Banner](https://via.placeholder.com/1200x300?text=NEXORA+AI+|+Operating+System+for+Intelligence)
+![Nexora AI Banner](https://github.com/K-vino/nexora-ai.git)
 
 ## 1. Project Identity
 
