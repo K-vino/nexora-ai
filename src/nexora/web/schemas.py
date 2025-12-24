@@ -13,3 +13,4 @@ class PipelineResponse(BaseModel):
     metrics: Dict[str, float]
     narrative: str
     report_path: str
+    html_report_path: str | None = None

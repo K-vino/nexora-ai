@@ -31,7 +31,8 @@ async def run_pipeline(request: PipelineRequest):
             status=result["status"],
             metrics=result["metrics"],
             narrative=result["narrative"],
-            report_path=result["report_path"]
+            report_path=result["report_path"],
+            html_report_path=result.get("html_report_path")
         )
         
     except ValueError as e:

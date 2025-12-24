@@ -7,6 +7,7 @@ from nexora.core.exceptions import NexoraError
 from nexora.ingestion.csv_connector import CSVConnector
 from nexora.validation.schema_validator import SchemaValidator
 from nexora.feature_engineering.auto_imputer import AutoImputer
+from nexora.validation.anomaly_detector import AnomalyDetector
 from nexora.modeling.regression import RandomForestRegressionStrategy, LinearRegressionStrategy
 from nexora.modeling.classification import RandomForestClassificationStrategy, LogisticRegressionStrategy
 from nexora.modeling.evaluator import ModelEvaluator
@@ -26,6 +27,7 @@ class NexoraPipeline:
         self.logger = Logger.get_logger("Orchestrator")
         self.connector = CSVConnector()
         self.validator = SchemaValidator()
+        self.anomaly_detector = AnomalyDetector()
         self.imputer = AutoImputer()
         self.evaluator = ModelEvaluator()
         self.explainer = SHAPWrapper()
@@ -54,6 +56,12 @@ class NexoraPipeline:
             
             # 2. Validation
             self.validator.validate(df)
+            
+            # Advanced Anomaly Detection (Isolation Forest)
+            anomalies = self.anomaly_detector.detect_anomalies_isolation_forest(df)
+            if anomalies.any():
+                self.logger.warning(f"Isolation Forest detected {anomalies.sum()} anomalies. Proceeding with caution.")
+                # In a real system, we might drop them or flag them.
             
             if target not in df.columns:
                 raise ValueError(f"Target column '{target}' not found in dataset.")
@@ -84,20 +92,22 @@ class NexoraPipeline:
             importance = self.explainer.explain_global(model, X_train)
             
             # 8. GenAI Narrative
-            context = {"metrics": metrics, "importance": importance}
+            context = {"metrics": metrics, "importance": importance, "anomalies_detected": int(anomalies.sum())}
             narrative = self.genai.generate_narrative(context)
             
             # 9. Reporting
             report_data = {
                 "run_id": run_id,
-                "config": {"source": source, "target": target, "task": task},
+                "config": {"source": source, "target": target, "task": task, "algo": algo},
                 "metrics": metrics,
                 "importance": importance,
-                "narrative": narrative
+                "narrative": narrative,
+                "anomalies_detected": int(anomalies.sum())
             }
             output_path = self.reporter.save_report(run_id, report_data)
+            html_path = self.reporter.generate_html_report(run_id, report_data)
             
-            self.logger.info(f"Pipeline finished successfully. Report at {output_path}")
+            self.logger.info(f"Pipeline finished successfully. JSON: {output_path}, HTML: {html_path}")
             
             return {
                 "run_id": run_id,
@@ -105,7 +115,8 @@ class NexoraPipeline:
                 "metrics": metrics,
                 "importance": importance,
                 "narrative": narrative,
-                "report_path": str(output_path)
+                "report_path": str(output_path),
+                "html_report_path": str(html_path) if html_path else None
             }
             
         except NexoraError as e:

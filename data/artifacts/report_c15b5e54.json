@@ -1,0 +1,21 @@
+{
+    "run_id": "c15b5e54",
+    "config": {
+        "source": "data/housing.csv",
+        "target": "Price",
+        "task": "regression",
+        "algo": "rf"
+    },
+    "metrics": {
+        "rmse": 33102.26578347772,
+        "r2": 0.9295582857142857
+    },
+    "importance": {
+        "Size": 0.29565318371251087,
+        "Bedrooms": 0.21626748195827988,
+        "Age": 0.24898583720467227,
+        "DistanceToCity": 0.239093497124537
+    },
+    "narrative": "\n        [EXECUTIVE AI SUMMARY]\n        \n        The predictive model has achieved strong performance with the following metrics:\n        {'rmse': 33102.26578347772, 'r2': 0.9295582857142857}\n        \n        Key drivers influencing the target outcome include:\n        Size, Age, DistanceToCity.\n        \n        Business Recommendation:\n        Focus on optimizing Size to improve outcomes.\n        ",
+    "anomalies_detected": 1
+}
