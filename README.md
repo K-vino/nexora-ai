@@ -116,7 +116,7 @@ Start FastAPI server:
 
 bash
 Copy code
-uvicorn src.nexora.web.api:app --reload
+uvicorn --app-dir src nexora.web.api:app --reload
 Open in browser:
 
 arduino

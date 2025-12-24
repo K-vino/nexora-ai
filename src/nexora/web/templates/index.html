@@ -1,121 +1,439 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexora AI | Enterprise Intelligence</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <title>NEXORA AI | Enterprise Intelligence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #64748b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --border: #e2e8f0;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        /* Input Panel */
+        .card {
+            background: var(--surface);
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 0.5rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        select,
+        input[type="file"] {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 0.375rem;
+            background: #fff;
+        }
+
+        button.primary-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            width: 100%;
+        }
+
+        button.primary-btn:hover {
+            background-color: #1d4ed8;
+        }
+
+        button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        /* Status Panel */
+        #status-panel {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Results Panel */
+        #results-panel {
+            display: none;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .metric-card {
+            background: #f1f5f9;
+            padding: 1rem;
+            border-radius: 0.375rem;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .insights-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .insights-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .narrative-box {
+            background: #fff;
+            border-left: 4px solid var(--success);
+            padding: 1rem;
+            font-style: italic;
+            color: #334155;
+        }
+
+        .actions-bar {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .btn-outline {
+            border: 1px solid var(--border);
+            background: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+        }
+
+        .btn-outline:hover {
+            background: #f8fafc;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
+
 <body>
+
     <div class="container">
         <header>
-            <h1>NEXORA AI</h1>
-            <p>Unified Data Science Platform</p>
+            <h1>🚀 NEXORA AI <span style="font-weight:300; font-size:1rem; color: #64748b;">| Enterprise Intelligence
+                    Platform</span></h1>
         </header>
 
-        <main>
-            <div class="card">
-                <h2>Run Analysis</h2>
-                <form id="pipelineForm">
-                    <div class="form-group">
-                        <label>Data Source Path (Local File)</label>
-                        <input type="text" id="source" value="data/housing.csv" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Target Column</label>
-                        <input type="text" id="target" value="Price" required>
-                    </div>
-
-                    <div class="row">
-                        <div class="form-group">
-                            <label>Task Type</label>
-                            <select id="task">
-                                <option value="regression">Regression</option>
-                                <option value="classification">Classification</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Algorithm</label>
-                            <select id="algo">
-                                <option value="rf">Random Forest</option>
-                                <option value="linear">Linear Regression</option>
-                                <option value="logistic">Logistic Regression</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <button type="submit" id="runBtn">Run Intelligence Pipeline</button>
-                    <p id="statusMsg"></p>
-                </form>
-            </div>
-
-            <div id="results" class="card hidden">
-                <h2>Analysis Results</h2>
-                
-                <div class="metric-grid" id="metricsDisplay"></div>
-                
-                <div class="narrative-box">
-                    <h3>AI Narrative</h3>
-                    <p id="narrativeText"></p>
+        <!-- Input Panel -->
+        <div class="card" id="input-panel">
+            <h2>1. Configuration</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Upload Dataset (CSV)</label>
+                    <input type="file" id="file-upload" accept=".csv">
+                </div>
+                <div class="form-group">
+                    <label>Task</label>
+                    <select id="task-select">
+                        <option value="regression">Regression</option>
+                        <option value="classification">Classification</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Algorithm</label>
+                    <select id="algo-select">
+                        <option value="rf">Random Forest</option>
+                        <option value="linear">Linear Regression</option>
+                        <option value="logistic">Logistic Regression</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Target Column</label>
+                    <select id="target-select" disabled>
+                        <option>Upload a file first</option>
+                    </select>
                 </div>
             </div>
-        </main>
+            <div style="margin-top: 1rem;">
+                <button class="primary-btn" id="run-btn" disabled>Run Analysis</button>
+            </div>
+        </div>
+
+        <!-- Status Panel -->
+        <div class="card" id="status-panel">
+            <div class="spinner"></div>
+            <h3 id="status-text">Processing...</h3>
+        </div>
+
+        <!-- Results Panel -->
+        <div id="results-panel">
+            <div class="card">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                    <h2>2. Analysis Report</h2>
+                    <span id="run-meta" style="font-size:0.875rem; color:var(--text-secondary);"></span>
+                </div>
+
+                <!-- Key Metrics -->
+                <div class="metrics-grid" id="metrics-container">
+                    <!-- Injected via JS -->
+                </div>
+
+                <div class="insights-grid">
+                    <!-- Feature Importance -->
+                    <div>
+                        <h3>Feature Importance</h3>
+                        <canvas id="xai-chart"></canvas>
+                    </div>
+                    <!-- Narrative -->
+                    <div>
+                        <h3>AI Narrative</h3>
+                        <div class="narrative-box" id="narrative-text"></div>
+                        <div style="margin-top:1rem;">
+                            <h3>Anomalies Detected</h3>
+                            <p id="anomaly-text" style="font-weight:600; color:var(--warning);"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="actions-bar">
+                    <a href="#" id="view-report-btn" target="_blank" class="btn-outline">📄 View Full HTML Report</a>
+                    <a href="#" id="download-report-btn" class="btn-outline" download>⬇️ Download JSON</a>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
-        document.getElementById("pipelineForm").addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById("runBtn");
-            const status = document.getElementById("statusMsg");
-            const resultsDiv = document.getElementById("results");
-            
-            btn.disabled = true;
-            btn.textContent = "Processing...";
-            status.textContent = "";
-            resultsDiv.classList.add("hidden");
+        let uploadedPath = "";
 
-            const payload = {
-                source_path: document.getElementById("source").value,
-                target_column: document.getElementById("target").value,
-                task: document.getElementById("task").value,
-                algorithm: document.getElementById("algo").value
-            };
+        // 1. File Upload & Parsing
+        document.getElementById('file-upload').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            document.getElementById('target-select').innerHTML = "<option>Parsing...</option>";
 
             try {
-                const response = await fetch("/api/run", {
-                    method: "POST",
-                    headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify(payload)
+                const res = await fetch('/api/upload', { method: 'POST', body: formData });
+                const data = await res.json();
+
+                uploadedPath = data.path;
+
+                // Populate Columns
+                const targetSelect = document.getElementById('target-select');
+                targetSelect.innerHTML = "";
+                data.columns.forEach(col => {
+                    const opt = document.createElement('option');
+                    opt.value = col;
+                    opt.textContent = col;
+                    targetSelect.appendChild(opt);
                 });
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.detail || "Pipeline failed");
-                }
-
-                // Render metrics
-                const metricsHtml = Object.entries(data.metrics)
-                    .map(([k, v]) => `
-                        <div class="metric-card">
-                            <h4>${k.toUpperCase()}</h4>
-                            <p>${v.toFixed(4)}</p>
-                        </div>
-                    `).join("");
-                
-                document.getElementById("metricsDisplay").innerHTML = metricsHtml;
-                document.getElementById("narrativeText").textContent = data.narrative;
-                resultsDiv.classList.remove("hidden");
+                targetSelect.disabled = false;
+                document.getElementById('run-btn').disabled = false;
 
             } catch (err) {
-                status.textContent = "Error: " + err.message;
-                status.style.color = "red";
-            } finally {
-                btn.disabled = false;
-                btn.textContent = "Run Intelligence Pipeline";
+                alert("Upload failed: " + err);
             }
         });
+
+        // 2. Run Pipeline
+        document.getElementById('run-btn').addEventListener('click', async () => {
+            const task = document.getElementById('task-select').value;
+            const algo = document.getElementById('algo-select').value;
+            const target = document.getElementById('target-select').value;
+
+            // Switch UI State
+            document.getElementById('input-panel').classList.add('hidden');
+            document.getElementById('status-panel').style.display = 'block';
+            document.getElementById('status-text').textContent = "Running Pipeline (Ingest > Validate > Train > XAI)...";
+
+            try {
+                const res = await fetch('/api/run', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        source_path: uploadedPath,
+                        target_column: target,
+                        task: task,
+                        algorithm: algo
+                    })
+                });
+
+                if (!res.ok) throw await res.json();
+
+                const result = await res.json();
+                renderResults(result);
+
+            } catch (err) {
+                document.getElementById('status-text').textContent = "Error: " + (err.detail || err);
+                document.getElementById('status-text').style.color = "var(--danger)";
+                document.querySelector('.spinner').style.display = 'none';
+            }
+        });
+
+        function renderResults(data) {
+            document.getElementById('status-panel').style.display = 'none';
+            document.getElementById('results-panel').style.display = 'block';
+
+            // Metadata
+            document.getElementById('run-meta').textContent = `Run ID: ${data.run_id} | Status: ${data.status.toUpperCase()}`;
+
+            // Metrics
+            const metricsContainer = document.getElementById('metrics-container');
+            metricsContainer.innerHTML = "";
+            for (const [key, val] of Object.entries(data.metrics)) {
+                metricsContainer.innerHTML += `
+                <div class="metric-card">
+                    <div class="metric-value">${val.toFixed(4)}</div>
+                    <div class="metric-label">${key}</div>
+                </div>`;
+            }
+
+            // Narrative
+            document.getElementById('narrative-text').textContent = data.narrative;
+
+            // Chart
+            /* Note: data.importance is expected to be {feature: score} */
+            const ctx = document.getElementById('xai-chart').getContext('2d');
+            const labels = Object.keys(data.importance);
+            const values = Object.values(data.importance);
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'SHAP Importance',
+                        data: values,
+                        backgroundColor: '#2563eb'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    indexAxis: 'y'
+                }
+            });
+
+            // Links
+            if (data.html_report_path) {
+                // We need to serve this file. For simplicity, we assume the API creates a linkable path or we just use file protocol valid on local
+                // Actually, browser won't allow local file links. 
+                // We should probably add a download endpoint or serve artifacts statically.
+                // For now, let's assume the user can click it if we serve static artifacts.
+                // Let's fix this in the next step by mounting artifacts dir.
+                const filename = data.html_report_path.split('\\').pop().split('/').pop();
+                document.getElementById('view-report-btn').href = `/api/artifacts/${filename}`;
+            }
+        }
     </script>
+
 </body>
+
 </html>

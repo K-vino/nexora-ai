@@ -1,5 +1,11 @@
 import argparse
 import sys
+import os
+from pathlib import Path
+
+# Add 'src' to python path to allow direct execution
+sys.path.append(str(Path(__file__).parent / "src"))
+
 from nexora.core.config import Config
 from nexora.core.exceptions import NexoraError
 from nexora.orchestration.pipeline import NexoraPipeline

@@ -1,11 +1,41 @@
-from fastapi import APIRouter, HTTPException, BackgroundTasks
+from fastapi import APIRouter, HTTPException, BackgroundTasks, UploadFile, File
 from nexora.web.schemas import PipelineRequest, PipelineResponse
 from nexora.orchestration.pipeline import NexoraPipeline
+from nexora.core.config import Config
 from nexora.core.exceptions import NexoraError
 import logging
+import shutil
+import pandas as pd
+from pathlib import Path
 
 router = APIRouter()
 logger = logging.getLogger("API")
+
+@router.post("/upload")
+async def upload_dataset(file: UploadFile = File(...)):
+    """
+    Uploads a dataset and returns its path and columns.
+    """
+    try:
+        # Save file to raw data directory
+        file_location = Config.RAW_DATA_PATH / file.filename
+        file_location.parent.mkdir(parents=True, exist_ok=True)
+        
+        with open(file_location, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+            
+        # Read columns for UI dropdown
+        df = pd.read_csv(file_location, nrows=5)
+        columns = df.columns.tolist()
+        
+        return {
+            "filename": file.filename,
+            "path": str(file_location.absolute()),
+            "columns": columns
+        }
+    except Exception as e:
+        logger.error(f"Upload failed: {e}")
+        raise HTTPException(status_code=500, detail=f"Upload failed: {str(e)}")
 
 @router.post("/run", response_model=PipelineResponse)
 async def run_pipeline(request: PipelineRequest):
