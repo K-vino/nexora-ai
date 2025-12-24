@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexora AI | Enterprise Intelligence</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>NEXORA AI</h1>
+            <p>Unified Data Science Platform</p>
+        </header>
+
+        <main>
+            <div class="card">
+                <h2>Run Analysis</h2>
+                <form id="pipelineForm">
+                    <div class="form-group">
+                        <label>Data Source Path (Local File)</label>
+                        <input type="text" id="source" value="data/housing.csv" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Target Column</label>
+                        <input type="text" id="target" value="Price" required>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group">
+                            <label>Task Type</label>
+                            <select id="task">
+                                <option value="regression">Regression</option>
+                                <option value="classification">Classification</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Algorithm</label>
+                            <select id="algo">
+                                <option value="rf">Random Forest</option>
+                                <option value="linear">Linear Regression</option>
+                                <option value="logistic">Logistic Regression</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="runBtn">Run Intelligence Pipeline</button>
+                    <p id="statusMsg"></p>
+                </form>
+            </div>
+
+            <div id="results" class="card hidden">
+                <h2>Analysis Results</h2>
+                
+                <div class="metric-grid" id="metricsDisplay"></div>
+                
+                <div class="narrative-box">
+                    <h3>AI Narrative</h3>
+                    <p id="narrativeText"></p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.getElementById("pipelineForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById("runBtn");
+            const status = document.getElementById("statusMsg");
+            const resultsDiv = document.getElementById("results");
+            
+            btn.disabled = true;
+            btn.textContent = "Processing...";
+            status.textContent = "";
+            resultsDiv.classList.add("hidden");
+
+            const payload = {
+                source_path: document.getElementById("source").value,
+                target_column: document.getElementById("target").value,
+                task: document.getElementById("task").value,
+                algorithm: document.getElementById("algo").value
+            };
+
+            try {
+                const response = await fetch("/api/run", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.detail || "Pipeline failed");
+                }
+
+                // Render metrics
+                const metricsHtml = Object.entries(data.metrics)
+                    .map(([k, v]) => `
+                        <div class="metric-card">
+                            <h4>${k.toUpperCase()}</h4>
+                            <p>${v.toFixed(4)}</p>
+                        </div>
+                    `).join("");
+                
+                document.getElementById("metricsDisplay").innerHTML = metricsHtml;
+                document.getElementById("narrativeText").textContent = data.narrative;
+                resultsDiv.classList.remove("hidden");
+
+            } catch (err) {
+                status.textContent = "Error: " + err.message;
+                status.style.color = "red";
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "Run Intelligence Pipeline";
+            }
+        });
+    </script>
+</body>
+</html>
