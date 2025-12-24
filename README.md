@@ -1,309 +1,213 @@
-# NEXORA AI — Unified Data Science & Artificial Intelligence Platform
+# 📊 NEXORA AI  
+**Unified Data Science & Artificial Intelligence Platform**
 
-🚀 NEXORA AI
-Operating System for Intelligence
+Repository: https://github.com/K-vino/nexora-ai
 
-Unified Data Science & Artificial Intelligence Platform
-Local-first · Cloud-agnostic · Explainable · Production-grade
+---
 
-![Nexora AI Banner](https://github.com/K-vino/nexora-ai.git)
+## 🚀 What Is NEXORA AI?
 
-📌 Overview
+**NEXORA AI** is a modular, enterprise-grade intelligence system designed to automate the full data science lifecycle — from raw data ingestion to explainable model predictions and AI-generated narrative reporting — all running locally without cloud dependencies.
 
-NEXORA AI is a modular, enterprise-grade Data Science & AI platform that automates the entire analytics lifecycle — from raw data ingestion to explainable predictions and GenAI-powered narrative reporting.
+It combines:
+- Data ingestion & validation
+- Feature engineering
+- Machine Learning (ML) with Strategy Pattern
+- Explainable AI (XAI)
+- GenAI storytelling
+- Web interface via FastAPI
 
-Unlike notebook-driven or black-box SaaS tools, NEXORA AI treats Data Science as a software system, built with:
+This project demonstrates **real systems thinking**, **clean architecture**, and **production-ready engineering principles**, making it ideal for:
+- Professional portfolios
+- Career advancement
+- Interviews (technical & system design)
 
-Clean Architecture
+---
 
-Object-Oriented Design
+## 🧠 Key Features
 
-Design Patterns
+### ⚙️ Core Modules
+- **Data Ingestion:** CSV / SQL adapters
+- **Validation:** Schema checks + advanced anomaly detection (Isolation Forest)
+- **Feature Engineering:** Fit-transform pipelines without leakage
+- **Modeling Engine:** Strategy Pattern for pluggable regressors/classifiers
+- **Explainability (XAI):** SHAP-powered feature importance
+- **GenAI Integration:** Narrative generation (RAG style prompt templates)
+- **Reporting:** JSON + HTML executive reports
 
-Explainability by design
+### 🖥️ Web Adapter (FastAPI)
+- Web UI for dataset upload
+- API to run analysis
+- Browser display of:
+  - Metrics
+  - Feature importance
+  - AI-narrative
+  - Downloadable HTML report
 
-This repository represents:
+---
 
-🧠 A realistic enterprise AI system
+## 📁 Repository Structure
 
-💼 A career-defining portfolio project
-
-🚀 A foundation for startup or research expansion
-
-🎯 Vision & Mission
-Vision
-
-To make enterprise-grade intelligence accessible without cloud dependency or vendor lock-in.
-
-Mission
-
-To build a transparent, explainable, and extensible AI system that:
-
-Automates data science workflows
-
-Enables trust in AI decisions
-
-Bridges technical models and business understanding
-
-❓ Problems This Solves
-1️⃣ Fragmented Data Science Workflows
-
-Current stacks rely on:
-
-Excel for exploration
-
-Python notebooks for modeling
-
-BI tools for visualization
-
-Slides for reporting
-
-➡️ NEXORA unifies everything into one deterministic pipeline
-
-2️⃣ Black-Box Machine Learning
-
-Most ML systems provide predictions without explanations.
-
-➡️ NEXORA delivers Explainability by Design (XAI)
-
-3️⃣ Toy Portfolio Projects
-
-Most projects showcase datasets, not systems.
-
-➡️ NEXORA demonstrates real engineering discipline
-
-🏗 Architectural Philosophy
-Core Design Principles
-
-Separation of Concerns
-
-Dependency Inversion
-
-Open–Closed Principle
-
-Explainability by Design
-
-Local-first & Privacy-first
-
-Architecture Pattern
-
-Layered Hexagonal Architecture (Ports & Adapters)
-
-This isolates:
-
-Core intelligence
-
-Infrastructure
-
-User interfaces
-
-Allowing:
-
-CLI & Web UI reuse
-
-Easy extensibility
-
-Long-term maintainability
-
-🧠 System Architecture
-graph TD
-    UI[Web / CLI UI] --> Orch[Orchestration Layer]
-    Orch --> Core[Core Intelligence Engine]
-    Core --> Infra[Infrastructure Layer]
-
-
-Text View
-
-Web / CLI UI
-      ↓
-Orchestration Layer
-      ↓
-Core Intelligence Engine
-      ↓
-Infrastructure (CSV | SQL | APIs)
-
-📂 Repository Structure
 nexora-ai/
 ├── data/
-│   ├── raw/
-│   ├── processed/
-│   └── artifacts/
-│
-├── docs/
-│
-├── src/nexora/
-│   ├── core/
-│   ├── ingestion/
-│   ├── validation/
-│   ├── feature_engineering/
-│   ├── modeling/
-│   ├── explainability/
-│   ├── genai/
-│   ├── reporting/
-│   ├── orchestration/
-│   └── web/
-│
-├── tests/
-│   ├── unit/
-│   └── integration/
-│
-├── main.py
-├── requirements.txt
-├── README.md
-└── masterplan.md
+│ ├── raw/ # Uploaded datasets
+│ ├── processed/ # Cleaned/featurized data
+│ └── artifacts/ # Models, reports, logs
+├── docs/ # Architecture & design docs
+├── src/
+│ └── nexora/
+│ ├── core/ # Config, logger, exceptions
+│ ├── ingestion/ # Data connectors
+│ ├── validation/ # Validators & anomaly detectors
+│ ├── feature_engineering/ # Transformers
+│ ├── modeling/ # Models + evaluators
+│ ├── explainability/ # XAI wrappers
+│ ├── genai/ # GenAI adapters
+│ ├── reporting/ # Report generators
+│ ├── orchestration/ # Pipeline engine
+│ └── web/ # FastAPI app + endpoints
+├── tests/ # Unit + integration tests
+├── main.py # CLI entry point
+├── requirements.txt # Python dependencies
+└── README.md
 
-🧩 Core Modules
-Module	Responsibility
-Ingestion	Load CSV / SQL data via adapters
-Validation	Schema checks, null checks, anomalies
-Feature Engineering	Safe transformations, no leakage
-Modeling	Strategy-based ML training
-Explainability (XAI)	SHAP-based insights
-GenAI	Narrative report generation
-Reporting	JSON + human-readable artifacts
-Orchestration	End-to-end pipeline control
-Web	FastAPI adapter
-🔄 Execution Flow
+yaml
+Copy code
 
-Load dataset
+---
 
-Validate schema & quality
+## 🛠️ Installation
 
-Feature–target split
+### 📦 Prerequisites
 
-Feature engineering
+- Python **3.9+**
+- pip
 
-Model training
+---
 
-Evaluation
+### 🧾 Setup
 
-Explainability (XAI)
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/K-vino/nexora-ai.git
+   cd nexora-ai
+Install dependencies:
 
-GenAI narrative generation
-
-Artifact persistence
-
-🧰 Technology Stack
-
-Language: Python 3.9+
-
-Data: Pandas, NumPy
-
-ML: Scikit-learn
-
-XAI: SHAP
-
-GenAI: LLM adapters (extensible)
-
-Web: FastAPI
-
-Testing: Pytest
-
-Design: OOP + Design Patterns
-
-⚙️ Installation
-Prerequisites
-
-Python 3.8+
-
-pip
-
-Setup
-git clone https://github.com/K-vino/nexora-ai.git
-cd nexora-ai
+bash
+Copy code
 pip install -r requirements.txt
+(Optional) Create a virtual environment:
 
-▶️ Usage
-Command Line Interface (CLI)
-python main.py \
-  --source data/sample_data.csv \
-  --target churn \
-  --task classification \
-  --algo rf
-
-
-Arguments
-
---source : CSV file path
-
---target : Target column
-
---task : regression | classification
-
---algo : rf | linear | logistic
-
-Web Interface & API
-
+bash
+Copy code
+python -m venv venv
+source venv/bin/activate
+▶️ Running the CLI
+📉 Example – Regression Task
+bash
+Copy code
+python main.py --source data/raw/housing.csv --target Price --task regression --algo rf
+📊 Example – Classification Task
+bash
+Copy code
+python main.py --source data/raw/iris.csv --target Species --task classification --algo logistic
+🌐 Running the Web App
 Start FastAPI server:
 
-uvicorn nexora.web.api:app --reload
+bash
+Copy code
+uvicorn src.nexora.web.api:app --reload
+Open in browser:
 
+arduino
+Copy code
+http://localhost:8000
+Use the UI to:
 
-Dashboard: http://127.0.0.1:8000
+Upload CSV
 
-API Docs: http://127.0.0.1:8000/docs
+Set target column
+
+Select task (+ algorithm)
+
+Run analysis
+
+View results + HTML report
+
+📊 What You Get in the Web UI
+✔ Run metadata
+✔ Data quality & anomaly summary
+✔ Performance metrics
+✔ Feature importance
+✔ AI-generated narrative
+✔ Downloadable HTML report
+
+All results are generated by the same core pipeline used in the CLI.
 
 🧪 Testing
-pytest tests/
+Run Unit Tests:
+bash
+Copy code
+pytest tests/unit
+Run Integration Tests:
+bash
+Copy code
+pytest tests/integration
+Tests focus on:
 
-Coverage
+Connectors
 
-Unit tests: validators, transformers, connectors
+Validators
 
-Integration tests: full pipeline execution
+Pipeline execution
 
-📈 Roadmap
-Phase 1 ✅
+Endpoint correctness (with mocks)
 
-Core architecture
+External ML library behaviors and non-deterministic GenAI outputs are mocked for test reliability.
 
-Data pipeline
+📌 Example Outputs
+report_<run_id>.html — Viewable HTML report
 
-Modeling engine
+JSON artifacts — Machine-readable results
 
-XAI
+Serialized models — Stored in data/artifacts/
 
-GenAI reporting
+💡 Design & Architecture (Engineering Highlights)
+✔ Hexagonal Architecture
+✔ Dependency Inversion & Strategy Pattern
+✔ Model-agnostic Explainability (XAI)
+✔ GenAI narrative (RAG prompt templates)
+✔ Web adapter with clear separation of concerns
 
-Phase 2 🚧
+🧠 Interview & Career Value
+Use this project to demonstrate:
 
-Web dashboard
-
-HTML reports
+System design + modular architecture
 
 Advanced anomaly detection
 
-Phase 3 🔮
+Explainable AI implementation
 
-Experiment tracking
+Classic design patterns in ML systems
 
-Drift detection
+Full-stack integration (CLI + Web UI)
 
-Reinforcement learning
+Typical interview-ready responses you can use:
 
-Computer vision adapters
+“I built an enterprise AI platform using Hexagonal Architecture to separate model logic from adapters.
+This allows the same pipeline to run from CLI or Web without duplication.”
 
-💼 Interview Value
-
-This project demonstrates:
-
-System design thinking
-
-ML lifecycle mastery
-
-Explainable AI principles
-
-Software engineering maturity
-
-Real-world AI tradeoffs
-
-“This is how internal AI platforms are actually built.”
+📚 Future Roadmap
+✔ Phase 1 — Core pipeline
+✔ Phase 2 — Advanced validation + HTML reporting
+✔ Phase 3 — Experiment tracking + drift detection
+✔ Phase 4 — Reinforcement learning + CV modules
+✔ Phase 5 — SaaS visualization dashboard (optional)
 
 📜 License
+This project is licensed under the MIT License — see LICENSE for details.
 
-MIT License — see LICENSE file for details.
+🌟 Acknowledgements
+Built by Vino K
+Portfolio: infotechVMD
 
-⭐ Final Note
-
-NEXORA AI is not a demo.
-It is a long-term intelligence system designed to scale with ambition and stand strong in any technical interview.
