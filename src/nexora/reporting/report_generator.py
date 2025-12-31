@@ -17,6 +17,7 @@ class ReportGenerator:
         try:
             filename = f"report_{run_id}.json"
             output_path = Config.ARTIFACTS_PATH / filename
+            output_path.parent.mkdir(parents=True, exist_ok=True)
             
             with open(output_path, 'w') as f:
                 json.dump(data, f, indent=4)
@@ -51,6 +52,7 @@ class ReportGenerator:
             
             filename = f"report_{run_id}.html"
             output_path = Config.ARTIFACTS_PATH / filename
+            output_path.parent.mkdir(parents=True, exist_ok=True)
             
             with open(output_path, 'w') as f:
                 f.write(html_content)

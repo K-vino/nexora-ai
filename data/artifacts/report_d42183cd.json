@@ -1,0 +1,21 @@
+{
+    "run_id": "d42183cd",
+    "config": {
+        "source": "C:\\Users\\vk557\\AppData\\Local\\Temp\\pytest-of-vk557\\pytest-1\\test_pipeline_classification0\\clf_test.csv",
+        "target": "label",
+        "task": "classification",
+        "algo": "logistic"
+    },
+    "metrics": {
+        "accuracy": 0.6,
+        "precision": 0.65,
+        "recall": 0.6,
+        "f1_score": 0.6
+    },
+    "importance": {
+        "f1": 0.5334805481425352
+    },
+    "narrative": "\n        [EXECUTIVE AI SUMMARY]\n        \n        The predictive model has achieved strong performance with the following metrics:\n        {'accuracy': 0.6, 'precision': 0.65, 'recall': 0.6, 'f1_score': 0.6}\n        \n        Key drivers influencing the target outcome include:\n        f1.\n        \n        Business Recommendation:\n        Focus on optimizing f1 to improve outcomes.\n        ",
+    "anomalies_summary": {
+        "total_rows": 50,
+        "anomaly_count": 

@@ -1,0 +1,23 @@
+{
+    "run_id": "ddac8743",
+    "config": {
+        "source": "C:\\Users\\vk557\\AppData\\Local\\Temp\\pytest-of-vk557\\pytest-2\\test_pipeline_end_to_end_regre0\\integration_test.csv",
+        "target": "target",
+        "task": "regression",
+        "algo": "rf"
+    },
+    "metrics": {
+        "rmse": 1.3667642317751094,
+        "mae": 1.2241185902056402,
+        "r2": -0.44848363110332645
+    },
+    "importance": {
+        "feature_num": 0.42255037551809976,
+        "feature_cat_A": 0.08835984764034885,
+        "feature_cat_B": 0.04372545762281015,
+        "feature_cat_C": 0.05360291860570264
+    },
+    "narrative": "\n        [EXECUTIVE AI SUMMARY]\n        \n        The predictive model has achieved strong performance with the following metrics:\n        {'rmse': 1.3667642317751094, 'mae': 1.2241185902056402, 'r2': -0.44848363110332645}\n        \n        Key drivers influencing the target outcome include:\n        feature_num, feature_cat_A, feature_cat_C.\n        \n        Business Recommendation:\n        Focus on optimizing feature_num to improve outcomes.\n        ",
+    "anomalies_summary": {
+        "total_rows": 50,
+        "anomaly_count": 
