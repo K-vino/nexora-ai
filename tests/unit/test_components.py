@@ -1,7 +1,7 @@
 import pytest
 import pandas as pd
-from nexora.validation.schema_validator import SchemaValidator
-from nexora.feature_engineering.auto_imputer import AutoImputer
+from validation.schema_validator import SchemaValidator
+from preprocessing.auto_imputer import AutoImputer
 
 def test_validator_detects_empty_df():
     """Unit Test: Ensure validator catches empty dataframes."""

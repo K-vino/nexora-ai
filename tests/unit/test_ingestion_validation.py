@@ -2,8 +2,8 @@ import pytest
 import pandas as pd
 import numpy as np
 from pathlib import Path
-from nexora.ingestion.csv_connector import CSVConnector
-from nexora.validation.anomaly_detector import AnomalyDetector
+from ingestion.csv_connector import CSVConnector
+from validation.anomaly_detector import AnomalyDetector
 
 @pytest.fixture
 def sample_csv(tmp_path):

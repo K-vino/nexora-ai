@@ -1,5 +1,5 @@
 from fastapi.testclient import TestClient
-from nexora.web.api import app
+from web_app.api import app
 from unittest.mock import patch, MagicMock
 
 client = TestClient(app)

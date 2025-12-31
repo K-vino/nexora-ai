@@ -1,8 +1,8 @@
 import pytest
 import pandas as pd
-from nexora.ingestion.csv_connector import CSVConnector
-from nexora.validation.schema_validator import SchemaValidator
-from nexora.core.exceptions import DataIngestionError, ValidationError
+from ingestion.csv_connector import CSVConnector
+from validation.schema_validator import SchemaValidator
+from utils.exceptions import DataIngestionError, ValidationError
 
 def test_csv_connector_file_not_found():
     connector = CSVConnector()

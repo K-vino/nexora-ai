@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 from pathlib import Path
 from nexora.orchestration.pipeline import NexoraPipeline
-from nexora.core.config import Config
+from utils.config import Config
 
 @pytest.fixture
 def sample_data(tmp_path):
