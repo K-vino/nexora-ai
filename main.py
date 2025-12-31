@@ -85,9 +85,51 @@ def run_nexora_pipeline():
         fi_extractor = FeatureImportance()
         top_features = fi_extractor.extract(training_results["all_results"], training_results["best_model"])
         
+        # -------------------------------------------------------------
+        # PHASE-3: DEEP LEARNING INTELLIGENCE ENGINE
+        # -------------------------------------------------------------
+        print("\n" + "="*50)
+        print("PHASE-3: DEEP LEARNING ENGINE STARTED")
+        print("="*50)
+
+        from ml_engine.data_splitter import DataSplitter # Reuse for Val split
+        from dl_engine.dl_trainer import DLTrainer
+        from dl_engine.dl_vs_ml_analysis import ComparativeAnalysis
+
+        # 9. Validation Split for DL
+        print("\n[STEP 9] CREATING VALIDATION SET")
+        # We split Training set into Train/Val
+        from sklearn.model_selection import train_test_split
+        X_train_dl, X_val_dl, y_train_dl, y_val_dl = train_test_split(
+            splits["X_train"], splits["y_train"], 
+            test_size=0.2, 
+            random_state=42
+        )
+        print(f"   DL Train: {X_train_dl.shape}")
+        print(f"   DL Val:   {X_val_dl.shape}")
+
+        # 10. DL Training
+        print("\n[STEP 10] NEURAL NETWORK TRAINING (ANN)")
+        dl_trainer = DLTrainer()
+        dl_results = dl_trainer.train_and_evaluate(
+            X_train_dl, y_train_dl, 
+            splits["X_test"], splits["y_test"], 
+            X_val_dl, y_val_dl, 
+            problem.task_type
+        )
+        ann_metrics = dl_results.get("ANN", {})
+        print(f"   ANN R2: {ann_metrics.get('R2')}")
+
+        # 11. ML vs DL Comparison
+        print("\n[STEP 11] COMPARATIVE ANALYSIS")
+        comparator = ComparativeAnalysis()
+        final_verdict = comparator.compare(training_results, dl_results)
+        print(f"   Decision: {final_verdict['final_decision']}")
+        print(f"   Reason: {final_verdict['reason']}")
+
         # PRINT FINAL INSIGHTS
         print("\n" + "="*50)
-        print("NEXORA AI ANALYST & ML REPORT")
+        print("NEXORA AI ANALYST, ML & DL REPORT")
         print("="*50)
         
         print(f"\ndataset: {data_bundle.metadata.get('file_path')}")
@@ -97,21 +139,19 @@ def run_nexora_pipeline():
         for explanation in data_bundle.eda_insights["key_findings"][:3]:
             print(f" - {explanation}")
             
-        print("\nML Performance (Best Model):")
-        best_metrics = training_results["all_results"][training_results["best_model"]]["metrics"]
-        for m, v in best_metrics.items():
-            print(f" * {m}: {v}")
+        print("\nModel Leaderboard:")
+        print(f" 1. {training_results['best_model']} (ML): R2 = {training_results['all_results'][training_results['best_model']]['metrics']['R2']}")
+        print(f" 2. ANN (Deep Learning): R2 = {ann_metrics.get('R2')}")
             
-        print("\nTop Predictive Drivers:")
-        for feat in top_features[:5]:
-            print(f" -> {feat['feature']}: {feat['importance']:.4f}")
+        print(f"\nFINAL SYSTEM RECOMMENDATION: {final_verdict['final_decision']}")
+        print(f" -> {final_verdict['reason']}")
             
         print("\nPipeline Reasoning Logic:")
         for step in data_bundle.metadata["reasoning"]:
             print(f" [System] {step}")
             
         print("\n" + "="*50)
-        print("PHASE-2 COMPLETE. READY FOR DEEP LEARNING.")
+        print("PHASE-3 COMPLETE. READY FOR NLP ENGINE.")
         print("="*50)
 
     except Exception as e:
