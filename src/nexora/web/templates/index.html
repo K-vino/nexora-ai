@@ -5,312 +5,281 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NEXORA AI | Enterprise Intelligence</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        :root {
-            --primary: #2563eb;
-            --secondary: #64748b;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --background: #f8fafc;
-            --surface: #ffffff;
-            --border: #e2e8f0;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-        }
-
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--background);
-            color: var(--text-primary);
-            margin: 0;
-            padding: 0;
-            line-height: 1.5;
+            background: radial-gradient(circle at top left, #1e293b, #0f172a);
+            color: #f8fafc;
+            min-height: 100vh;
         }
 
-        /* Layout */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
 
-        header {
-            margin-bottom: 2rem;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 1rem;
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+        .glass-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            border-color: rgba(14, 165, 233, 0.4);
         }
 
-        h2 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        /* Input Panel */
-        .card {
-            background: var(--surface);
-            border-radius: 0.5rem;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-        }
-
-        .form-group {
-            margin-bottom: 0.5rem;
-        }
-
-        label {
-            display: block;
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: var(--text-secondary);
-            margin-bottom: 0.25rem;
-        }
-
-        select,
-        input[type="file"] {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid var(--border);
-            border-radius: 0.375rem;
-            background: #fff;
-        }
-
-        button.primary-btn {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.375rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-            width: 100%;
-        }
-
-        button.primary-btn:hover {
-            background-color: #1d4ed8;
-        }
-
-        button:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
-
-        /* Status Panel */
-        #status-panel {
-            display: none;
-            text-align: center;
-            padding: 2rem;
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
         }
 
         .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid var(--primary);
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-left-color: #0ea5e9;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 24px;
+            height: 24px;
             animation: spin 1s linear infinite;
-            margin: 0 auto 1rem;
         }
 
         @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
+            to {
                 transform: rotate(360deg);
             }
-        }
-
-        /* Results Panel */
-        #results-panel {
-            display: none;
-        }
-
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .metric-card {
-            background: #f1f5f9;
-            padding: 1rem;
-            border-radius: 0.375rem;
-            text-align: center;
-        }
-
-        .metric-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .metric-label {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-        }
-
-        .insights-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        @media (max-width: 768px) {
-            .insights-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .narrative-box {
-            background: #fff;
-            border-left: 4px solid var(--success);
-            padding: 1rem;
-            font-style: italic;
-            color: #334155;
-        }
-
-        .actions-bar {
-            display: flex;
-            gap: 1rem;
-            justify-content: flex-end;
-        }
-
-        .btn-outline {
-            border: 1px solid var(--border);
-            background: #fff;
-            padding: 0.5rem 1rem;
-            border-radius: 0.375rem;
-            text-decoration: none;
-            color: var(--text-primary);
-            font-size: 0.875rem;
-        }
-
-        .btn-outline:hover {
-            background: #f8fafc;
-        }
-
-        .hidden {
-            display: none;
         }
     </style>
 </head>
 
-<body>
+<body class="p-4 md:p-8">
 
-    <div class="container">
-        <header>
-            <h1>🚀 NEXORA AI <span style="font-weight:300; font-size:1rem; color: #64748b;">| Enterprise Intelligence
-                    Platform</span></h1>
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <header class="mb-10 flex items-center justify-between animate-fade-in">
+            <div>
+                <h1 class="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-600">
+                    NEXORA AI
+                </h1>
+                <p class="text-slate-400 mt-1">Enterprise Data Intelligence Platform</p>
+            </div>
+            <div class="hidden md:block">
+                <span class="px-3 py-1 rounded-full glass text-xs font-mono text-cyan-300">v1.0.0-RC1</span>
+            </div>
         </header>
 
-        <!-- Input Panel -->
-        <div class="card" id="input-panel">
-            <h2>1. Configuration</h2>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>Upload Dataset (CSV)</label>
-                    <input type="file" id="file-upload" accept=".csv">
-                </div>
-                <div class="form-group">
-                    <label>Task</label>
-                    <select id="task-select">
-                        <option value="regression">Regression</option>
-                        <option value="classification">Classification</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Algorithm</label>
-                    <select id="algo-select">
-                        <option value="rf">Random Forest</option>
-                        <option value="linear">Linear Regression</option>
-                        <option value="logistic">Logistic Regression</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Target Column</label>
-                    <select id="target-select" disabled>
-                        <option>Upload a file first</option>
-                    </select>
-                </div>
-            </div>
-            <div style="margin-top: 1rem;">
-                <button class="primary-btn" id="run-btn" disabled>Run Analysis</button>
-            </div>
-        </div>
+        <!-- Main Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-        <!-- Status Panel -->
-        <div class="card" id="status-panel">
-            <div class="spinner"></div>
-            <h3 id="status-text">Processing...</h3>
-        </div>
+            <!-- Left Panel: Configuration -->
+            <div class="lg:col-span-4 space-y-6 animate-fade-in" style="animation-delay: 0.1s;">
+                <div class="glass-card p-6">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        Configuration
+                    </h2>
 
-        <!-- Results Panel -->
-        <div id="results-panel">
-            <div class="card">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-                    <h2>2. Analysis Report</h2>
-                    <span id="run-meta" style="font-size:0.875rem; color:var(--text-secondary);"></span>
-                </div>
+                    <div class="space-y-4">
+                        <!-- File Upload -->
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Dataset (CSV)</label>
+                            <div class="relative">
+                                <input type="file" id="file-upload" accept=".csv" class="block w-full text-sm text-slate-300
+                                  file:mr-4 file:py-2 file:px-4
+                                  file:rounded-full file:border-0
+                                  file:text-sm file:font-semibold
+                                  file:bg-brand-600 file:text-white
+                                  hover:file:bg-brand-500
+                                  glass rounded-lg cursor-pointer
+                                " />
+                            </div>
+                        </div>
 
-                <!-- Key Metrics -->
-                <div class="metrics-grid" id="metrics-container">
-                    <!-- Injected via JS -->
-                </div>
+                        <!-- Task -->
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Task Type</label>
+                            <select id="task-select"
+                                class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                                <option value="regression">Regression (Predict Number)</option>
+                                <option value="classification">Classification (Predict Category)</option>
+                            </select>
+                        </div>
 
-                <div class="insights-grid">
-                    <!-- Feature Importance -->
-                    <div>
-                        <h3>Feature Importance</h3>
-                        <canvas id="xai-chart"></canvas>
+                        <!-- Algorithm -->
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Algorithm</label>
+                            <select id="algo-select"
+                                class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                                <option value="rf">Random Forest (Ensemble)</option>
+                                <option value="linear">Linear Regression</option>
+                                <option value="logistic">Logistic Regression</option>
+                            </select>
+                        </div>
+
+                        <!-- Target -->
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Target Column</label>
+                            <select id="target-select" disabled
+                                class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-slate-400 disabled:opacity-50 cursor-not-allowed">
+                                <option>Upload file first...</option>
+                            </select>
+                        </div>
+
+                        <button id="run-btn" disabled
+                            class="w-full mt-4 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg transform transition disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2">
+                            <span>Run Analysis</span>
+                            <div id="btn-spinner" class="spinner hidden"></div>
+                        </button>
                     </div>
-                    <!-- Narrative -->
-                    <div>
-                        <h3>AI Narrative</h3>
-                        <div class="narrative-box" id="narrative-text"></div>
-                        <div style="margin-top:1rem;">
-                            <h3>Anomalies Detected</h3>
-                            <p id="anomaly-text" style="font-weight:600; color:var(--warning);"></p>
+                </div>
+
+                <!-- System Status -->
+                <div class="glass-card p-4 hidden" id="system-status">
+                    <div class="flex items-center gap-3">
+                        <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                        <p class="text-sm text-slate-300 font-mono" id="status-msg">System Ready</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Results -->
+            <div class="lg:col-span-8 space-y-6 animate-fade-in" style="animation-delay: 0.2s;">
+
+                <!-- Welcome / Empty State -->
+                <div id="empty-state" class="glass-card p-12 text-center border-dashed border-2 border-slate-700">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-800 mb-4">
+                        <svg class="w-8 h-8 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-medium text-slate-300">Ready for Intelligence</h3>
+                    <p class="text-slate-500 mt-2">Upload a dataset and configure the pipeline to start.</p>
+                </div>
+
+                <!-- Results Container -->
+                <div id="results-container" class="hidden space-y-6">
+
+                    <!-- Top Metrics -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="metrics-grid">
+                        <!-- Injected JS -->
+                    </div>
+
+                    <!-- Charts & Narrative -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Feature Importance -->
+                        <div class="glass-card p-6">
+                            <h3 class="text-lg font-semibold mb-4 text-cyan-400">Key Drivers (SHAP)</h3>
+                            <canvas id="shap-chart"></canvas>
+                        </div>
+
+                        <!-- Narrative & Anomalies -->
+                        <div class="space-y-6">
+                            <!-- Narrative -->
+                            <div class="glass-card p-6 border-l-4 border-l-cyan-500">
+                                <h3 class="text-lg font-semibold mb-2 flex items-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                    </svg>
+                                    AI Insight
+                                </h3>
+                                <div id="narrative-text"
+                                    class="text-slate-300 text-sm leading-relaxed whitespace-pre-line"></div>
+                            </div>
+
+                            <!-- Anomalies -->
+                            <div class="glass-card p-6">
+                                <div class="flex justify-between items-center mb-2">
+                                    <h3 class="text-lg font-semibold text-orange-400">Data Health</h3>
+                                    <span id="anomaly-badge"
+                                        class="px-2 py-1 rounded text-xs font-bold bg-orange-900 text-orange-300">CHECKING</span>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4 text-center">
+                                    <div class="bg-slate-800/50 p-3 rounded-lg">
+                                        <div class="text-2xl font-bold text-slate-100" id="anomaly-count">-</div>
+                                        <div class="text-xs text-slate-500">Anomalies Detected</div>
+                                    </div>
+                                    <div class="bg-slate-800/50 p-3 rounded-lg">
+                                        <div class="text-2xl font-bold text-slate-100" id="contamination">-</div>
+                                        <div class="text-xs text-slate-500">Contamination %</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Actions -->
-                <div class="actions-bar">
-                    <a href="#" id="view-report-btn" target="_blank" class="btn-outline">📄 View Full HTML Report</a>
-                    <a href="#" id="download-report-btn" class="btn-outline" download>⬇️ Download JSON</a>
+                    <!-- Actions -->
+                    <div class="flex justify-end gap-4 pt-4 border-t border-slate-700">
+                        <a id="download-json" href="#" target="_blank"
+                            class="px-4 py-2 rounded-lg border border-slate-600 text-slate-300 hover:bg-slate-800 transition text-sm flex items-center gap-2">
+                            <span>JSON Audit</span>
+                        </a>
+                        <a id="view-report" href="#" target="_blank"
+                            class="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white transition text-sm flex items-center gap-2 shadow-lg hover:shadow-green-500/20">
+                            <span>View Executive Report</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                        </a>
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Scripts -->
     <script>
         let uploadedPath = "";
+        let chartInstance = null;
 
-        // 1. File Upload & Parsing
+        // 1. File Upload
         document.getElementById('file-upload').addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (!file) return;
@@ -318,7 +287,9 @@
             const formData = new FormData();
             formData.append('file', file);
 
-            document.getElementById('target-select').innerHTML = "<option>Parsing...</option>";
+            const targetSelect = document.getElementById('target-select');
+            targetSelect.innerHTML = "<option>Analyzing Schema...</option>";
+            targetSelect.disabled = true;
 
             try {
                 const res = await fetch('/api/upload', { method: 'POST', body: formData });
@@ -327,19 +298,25 @@
                 uploadedPath = data.path;
 
                 // Populate Columns
-                const targetSelect = document.getElementById('target-select');
                 targetSelect.innerHTML = "";
                 data.columns.forEach(col => {
                     const opt = document.createElement('option');
                     opt.value = col;
                     opt.textContent = col;
+                    // Auto-select if mostly unique or string? No, let's pick last col as heuristic or just first
                     targetSelect.appendChild(opt);
                 });
                 targetSelect.disabled = false;
-                document.getElementById('run-btn').disabled = false;
+
+                // Enable Run
+                const runBtn = document.getElementById('run-btn');
+                runBtn.disabled = false;
+                runBtn.classList.remove('opacity-50');
+
+                showStatus("Dataset uploaded successfully.", "success");
 
             } catch (err) {
-                alert("Upload failed: " + err);
+                showStatus("Upload failed: " + err, "error");
             }
         });
 
@@ -349,10 +326,8 @@
             const algo = document.getElementById('algo-select').value;
             const target = document.getElementById('target-select').value;
 
-            // Switch UI State
-            document.getElementById('input-panel').classList.add('hidden');
-            document.getElementById('status-panel').style.display = 'block';
-            document.getElementById('status-text').textContent = "Running Pipeline (Ingest > Validate > Train > XAI)...";
+            setLoading(true);
+            showStatus("Executing Pipeline... (Ingestion > Validation > Modeling > XAI)", "info");
 
             try {
                 const res = await fetch('/api/run', {
@@ -370,70 +345,119 @@
 
                 const result = await res.json();
                 renderResults(result);
+                showStatus("Analysis Complete!", "success");
 
             } catch (err) {
-                document.getElementById('status-text').textContent = "Error: " + (err.detail || err);
-                document.getElementById('status-text').style.color = "var(--danger)";
-                document.querySelector('.spinner').style.display = 'none';
+                showStatus("Error: " + (err.detail || err), "error");
+            } finally {
+                setLoading(false);
             }
         });
 
         function renderResults(data) {
-            document.getElementById('status-panel').style.display = 'none';
-            document.getElementById('results-panel').style.display = 'block';
-
-            // Metadata
-            document.getElementById('run-meta').textContent = `Run ID: ${data.run_id} | Status: ${data.status.toUpperCase()}`;
+            document.getElementById('empty-state').classList.add('hidden');
+            document.getElementById('results-container').classList.remove('hidden');
 
             // Metrics
-            const metricsContainer = document.getElementById('metrics-container');
-            metricsContainer.innerHTML = "";
+            const metricsGrid = document.getElementById('metrics-grid');
+            metricsGrid.innerHTML = "";
             for (const [key, val] of Object.entries(data.metrics)) {
-                metricsContainer.innerHTML += `
-                <div class="metric-card">
-                    <div class="metric-value">${val.toFixed(4)}</div>
-                    <div class="metric-label">${key}</div>
-                </div>`;
+                metricsGrid.innerHTML += `
+                    <div class="glass-card p-4 text-center">
+                        <div class="text-2xl font-bold text-cyan-400">${val < 1 ? val.toFixed(4) : val.toFixed(2)}</div>
+                        <div class="text-xs text-slate-400 uppercase tracking-wider mt-1">${key.replace('_', ' ')}</div>
+                    </div>
+                `;
             }
 
             // Narrative
             document.getElementById('narrative-text').textContent = data.narrative;
 
-            // Chart
-            /* Note: data.importance is expected to be {feature: score} */
-            const ctx = document.getElementById('xai-chart').getContext('2d');
-            const labels = Object.keys(data.importance);
-            const values = Object.values(data.importance);
+            // Anomalies
+            const summary = data.anomalies_summary;
+            document.getElementById('anomaly-count').textContent = summary.anomaly_count;
+            document.getElementById('contamination').textContent = (summary.contamination_ratio * 100).toFixed(2) + "%";
 
-            new Chart(ctx, {
+            const badge = document.getElementById('anomaly-badge');
+            if (summary.anomaly_count > 0) {
+                badge.textContent = "WARNING";
+                badge.className = "px-2 py-1 rounded text-xs font-bold bg-orange-900 text-orange-300";
+            } else {
+                badge.textContent = "PASSED";
+                badge.className = "px-2 py-1 rounded text-xs font-bold bg-green-900 text-green-300";
+            }
+
+            // Links
+            if (data.html_report_path) {
+                const fname = data.html_report_path.split(/[\\/]/).pop();
+                document.getElementById('view-report').href = `/api/artifacts/${fname}`;
+            }
+            if (data.report_path) {
+                const fname = data.report_path.split(/[\\/]/).pop();
+                document.getElementById('download-json').href = `/api/artifacts/${fname}`;
+            }
+
+            // Chart
+            renderChart(data.importance);
+        }
+
+        function renderChart(importance) {
+            const ctx = document.getElementById('shap-chart').getContext('2d');
+            if (chartInstance) chartInstance.destroy();
+
+            const labels = Object.keys(importance);
+            const values = Object.values(importance);
+
+            chartInstance = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: 'SHAP Importance',
+                        label: 'Feature Importance',
                         data: values,
-                        backgroundColor: '#2563eb'
+                        backgroundColor: 'rgba(14, 165, 233, 0.7)',
+                        borderColor: 'rgba(14, 165, 233, 1)',
+                        borderWidth: 1,
+                        borderRadius: 4
                     }]
                 },
                 options: {
+                    indexAxis: 'y',
                     responsive: true,
-                    indexAxis: 'y'
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#94a3b8' } },
+                        y: { grid: { display: false }, ticks: { color: '#e2e8f0' } }
+                    }
                 }
             });
+        }
 
-            // Links
-            if (data.html_report_path) {
-                // We need to serve this file. For simplicity, we assume the API creates a linkable path or we just use file protocol valid on local
-                // Actually, browser won't allow local file links. 
-                // We should probably add a download endpoint or serve artifacts statically.
-                // For now, let's assume the user can click it if we serve static artifacts.
-                // Let's fix this in the next step by mounting artifacts dir.
-                const filename = data.html_report_path.split('\\').pop().split('/').pop();
-                document.getElementById('view-report-btn').href = `/api/artifacts/${filename}`;
+        function setLoading(isLoading) {
+            const btn = document.getElementById('run-btn');
+            const spinner = document.getElementById('btn-spinner');
+            if (isLoading) {
+                btn.disabled = true;
+                spinner.classList.remove('hidden');
+            } else {
+                btn.disabled = false;
+                spinner.classList.add('hidden');
             }
         }
-    </script>
 
+        function showStatus(msg, type) {
+            const el = document.getElementById('system-status');
+            const txt = document.getElementById('status-msg');
+            el.classList.remove('hidden');
+            txt.textContent = msg;
+
+            if (type === 'error') txt.classList.add('text-red-400');
+            else if (type === 'success') txt.classList.add('text-green-400');
+            else txt.classList.remove('text-red-400', 'text-green-400');
+        }
+    </script>
 </body>
 
 </html>

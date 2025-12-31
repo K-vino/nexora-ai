@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, BackgroundTasks, UploadFile, File
+from fastapi.responses import FileResponse
 from nexora.web.schemas import PipelineRequest, PipelineResponse
 from nexora.orchestration.pipeline import NexoraPipeline
 from nexora.core.config import Config
@@ -72,3 +73,14 @@ async def run_pipeline(request: PipelineRequest):
     except Exception as e:
         logger.error(f"Internal Server Error: {e}")
         raise HTTPException(status_code=500, detail="Internal Execution Error")
+
+@router.get("/artifacts/{filename}")
+async def get_artifact(filename: str):
+    """
+    Serves generated artifacts (HTML reports, JSON, images).
+    """
+    file_path = Config.ARTIFACTS_PATH / filename
+    if not file_path.exists():
+        raise HTTPException(status_code=404, detail="Artifact not found")
+        
+    return FileResponse(path=file_path, filename=filename, media_type='application/octet-stream')

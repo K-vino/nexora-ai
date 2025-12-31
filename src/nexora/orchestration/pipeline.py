@@ -7,12 +7,14 @@ from nexora.core.exceptions import NexoraError
 from nexora.ingestion.csv_connector import CSVConnector
 from nexora.validation.schema_validator import SchemaValidator
 from nexora.feature_engineering.auto_imputer import AutoImputer
+from nexora.feature_engineering.categorical_encoder import CategoricalEncoder
 from nexora.validation.anomaly_detector import AnomalyDetector
 from nexora.modeling.regression import RandomForestRegressionStrategy, LinearRegressionStrategy
 from nexora.modeling.classification import RandomForestClassificationStrategy, LogisticRegressionStrategy
 from nexora.modeling.evaluator import ModelEvaluator
 from nexora.explainability.shap_wrapper import SHAPWrapper
 from nexora.genai.mock_llm_adapter import MockLLMAdapter
+from nexora.genai.narrative_generator import NarrativeGenerator
 from nexora.reporting.report_generator import ReportGenerator
 
 from sklearn.model_selection import train_test_split
@@ -29,9 +31,11 @@ class NexoraPipeline:
         self.validator = SchemaValidator()
         self.anomaly_detector = AnomalyDetector()
         self.imputer = AutoImputer()
+        self.encoder = CategoricalEncoder()
         self.evaluator = ModelEvaluator()
         self.explainer = SHAPWrapper()
         self.genai = MockLLMAdapter()
+        self.narrative_gen = NarrativeGenerator(self.genai)
         self.reporter = ReportGenerator()
         
     def _get_model_strategy(self, task: str, algo: str):
@@ -59,9 +63,10 @@ class NexoraPipeline:
             
             # Advanced Anomaly Detection (Isolation Forest)
             anomalies = self.anomaly_detector.detect_anomalies_isolation_forest(df)
+            anomaly_summary = self.anomaly_detector.summarize_anomalies(df, anomalies)
+            
             if anomalies.any():
                 self.logger.warning(f"Isolation Forest detected {anomalies.sum()} anomalies. Proceeding with caution.")
-                # In a real system, we might drop them or flag them.
             
             if target not in df.columns:
                 raise ValueError(f"Target column '{target}' not found in dataset.")
@@ -70,15 +75,15 @@ class NexoraPipeline:
             X = df.drop(columns=[target])
             y = df[target]
             
-            # 4. Feature Engineering (Imputation)
+            # 4. Feature Engineering (Imputation + Encoding)
             # fit_transform on whole X for simplicity of current constraints
             self.imputer.fit(X)
             X_clean = self.imputer.transform(X)
             
-            # OHE for categoricals (Minimal handling for demo)
-            X_clean = pd.get_dummies(X_clean, drop_first=True)
+            self.encoder.fit(X_clean)
+            X_encoded = self.encoder.transform(X_clean)
             
-            X_train, X_test, y_train, y_test = train_test_split(X_clean, y, test_size=0.2, random_state=42)
+            X_train, X_test, y_train, y_test = train_test_split(X_encoded, y, test_size=0.2, random_state=42)
             
             # 5. Modeling
             strategy = self._get_model_strategy(task, algo)
@@ -92,8 +97,7 @@ class NexoraPipeline:
             importance = self.explainer.explain_global(model, X_train)
             
             # 8. GenAI Narrative
-            context = {"metrics": metrics, "importance": importance, "anomalies_detected": int(anomalies.sum())}
-            narrative = self.genai.generate_narrative(context)
+            narrative = self.narrative_gen.generate_report_narrative(metrics, importance, anomaly_summary)
             
             # 9. Reporting
             report_data = {
@@ -102,7 +106,7 @@ class NexoraPipeline:
                 "metrics": metrics,
                 "importance": importance,
                 "narrative": narrative,
-                "anomalies_detected": int(anomalies.sum())
+                "anomalies_summary": anomaly_summary
             }
             output_path = self.reporter.save_report(run_id, report_data)
             html_path = self.reporter.generate_html_report(run_id, report_data)
@@ -115,6 +119,7 @@ class NexoraPipeline:
                 "metrics": metrics,
                 "importance": importance,
                 "narrative": narrative,
+                "anomalies_summary": anomaly_summary,
                 "report_path": str(output_path),
                 "html_report_path": str(html_path) if html_path else None
             }

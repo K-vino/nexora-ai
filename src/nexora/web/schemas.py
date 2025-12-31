@@ -12,5 +12,7 @@ class PipelineResponse(BaseModel):
     status: str
     metrics: Dict[str, float]
     narrative: str
+    importance: Dict[str, float]
+    anomalies_summary: Dict[str, Any]
     report_path: str
     html_report_path: str | None = None
