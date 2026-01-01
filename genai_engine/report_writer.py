@@ -1,65 +1,23 @@
-import json
-from pathlib import Path
-from typing import Dict, Any
-from utils.config import Config
+import os
+from datetime import datetime
 from utils.logging import Logger
 
-class ReportGenerator:
+class ReportWriter:
     """
-    Generates artifacts from the analysis pipeline.
+    Writes the final NEXORA AI Intelligence Report to disk.
     """
-    
-    def __init__(self):
-        self.logger = Logger.get_logger("ReportGenerator")
+    def __init__(self, output_dir="reports"):
+        self.logger = Logger.get_logger("ReportWriter")
+        self.output_dir = output_dir
+        os.makedirs(output_dir, exist_ok=True)
         
-    def save_report(self, run_id: str, data: Dict[str, Any]):
-        """Saves analysis results to a JSON file in artifacts."""
-        try:
-            filename = f"report_{run_id}.json"
-            output_path = Config.ARTIFACTS_PATH / filename
-            output_path.parent.mkdir(parents=True, exist_ok=True)
+    def save_report(self, content: str, report_type="analysis"):
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"nexora_{report_type}_{timestamp}.txt"
+        path = os.path.join(self.output_dir, filename)
+        
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(content)
             
-            with open(output_path, 'w') as f:
-                json.dump(data, f, indent=4)
-                
-            self.logger.info(f"Report saved to {output_path}")
-            return output_path
-        except Exception as e:
-            self.logger.error(f"Failed to save report: {e}")
-
-    def generate_html_report(self, run_id: str, data: Dict[str, Any]):
-        """Generates a human-readable HTML report."""
-        try:
-            from jinja2 import Template
-            import datetime
-            
-            template_path = Path(__file__).parent / "report_template.html"
-            
-            if not template_path.exists():
-                self.logger.warning("HTML template not found. Skipping HTML report.")
-                return None
-                
-            with open(template_path, 'r') as f:
-                template_str = f.read()
-                
-            template = Template(template_str)
-            
-            # Add timestamp if not present
-            if "timestamp" not in data:
-                data["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                
-            html_content = template.render(**data)
-            
-            filename = f"report_{run_id}.html"
-            output_path = Config.ARTIFACTS_PATH / filename
-            output_path.parent.mkdir(parents=True, exist_ok=True)
-            
-            with open(output_path, 'w') as f:
-                f.write(html_content)
-                
-            self.logger.info(f"HTML Report saved to {output_path}")
-            return output_path
-            
-        except Exception as e:
-            self.logger.error(f"Failed to generate HTML report: {e}")
-            return None
+        self.logger.info(f"Report saved to: {path}")
+        return path

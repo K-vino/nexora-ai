@@ -181,33 +181,57 @@ def run_nexora_pipeline():
         for t in topics:
             print(f"   Topic {t['topic_id']}: {', '.join(t['terms'])}")
 
-        # PRINT FINAL INSIGHTS
+        # -------------------------------------------------------------
+        # PHASE-5: GENERATIVE AI INSIGHT LAYER
+        # -------------------------------------------------------------
         print("\n" + "="*50)
-        print("NEXORA AI ANALYST, ML, DL & NLP REPORT")
+        print("PHASE-5: GENERATIVE AI INSIGHT LAYER STARTED")
         print("="*50)
         
-        print(f"\ndataset: {data_bundle.metadata.get('file_path')}")
-        print(f"health_score: {data_bundle.quality_report.get('health_score')}\n")
+        from genai_engine.insight_generator import InsightGenerator
+        from genai_engine.report_writer import ReportWriter
         
-        print("Data Insights:")
-        for explanation in data_bundle.eda_insights["key_findings"][:3]:
-            print(f" - {explanation}")
-            
-        print("\nModel Leaderboard:")
-        print(f" 1. {training_results['best_model']} (ML): R2 = {training_results['all_results'][training_results['best_model']]['metrics']['R2']}")
-        print(f" 2. ANN (Deep Learning): R2 = {ann_metrics.get('R2')}")
-            
-        print(f"\nFINAL SYSTEM RECOMMENDATION: {final_verdict['final_decision']}")
-        print(f" -> {final_verdict['reason']}")
+        # 17. Generate Insights
+        print("\n[STEP 17] GENERATING TRUSTWORTHY NARRATIVES")
+        genai = InsightGenerator()
         
-        print("\nNLP Intelligence:")
-        print(f" - Documents Analyzed: {len(doc_ids)}")
-        print(f" - Key Themes Detected: {', '.join([t['terms'][0] for t in topics])}")
-        if matches_101:
-             print(f" - Strongest Link: Doc {doc_ids[0]} <-> Doc {matches_101[0]['match_doc_id']}")
+        # A. Exec Summary
+        exec_summary = genai.generate_executive_summary(
+            data_bundle.metadata,
+            data_bundle.quality_report,
+            training_results,
+            training_results["best_model"],
+            top_features
+        )
         
+        # B. Comparative Analysis
+        ml_best_r2_val = training_results['all_results'][training_results['best_model']]["metrics"]["R2"]
+        dl_r2_val = ann_metrics.get("R2", 0.0)
+        
+        comp_analysis = genai.generate_comparative_analysis(
+            training_results["best_model"],
+            ml_best_r2_val,
+            dl_r2_val,
+            final_verdict
+        )
+        
+        # C. NLP Insight
+        nlp_analysis = genai.generate_nlp_analysis(
+            len(doc_ids), 
+            topics, 
+            matches_101[0] if matches_101 else None
+        )
+        
+        # 18. Final Report Assembly
+        full_report = exec_summary + "\n" + comp_analysis + "\n" + nlp_analysis
+        print(full_report)
+        
+        writer = ReportWriter()
+        report_path = writer.save_report(full_report)
+        print(f"\n[STEP 18] REPORT SAVED: {report_path}")
+
         print("\n" + "="*50)
-        print("PHASE-4 COMPLETE. READY FOR GENAI INSIGHTS.")
+        print("PHASE-5 COMPLETE. NEXORA PIPELINE FINISHED.")
         print("="*50)
 
     except Exception as e:
